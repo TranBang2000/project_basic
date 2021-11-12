@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const postSchema = new Schema(
   {
-    tile: { type: String, require: true},
+    title: { type: String, require: true},
     description: { type: String, require: true },
     url: { type: String, default: null },
     status:{type:String,enum:['Success','Pending','Failed']},

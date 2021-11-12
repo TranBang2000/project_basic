@@ -74,7 +74,7 @@ routerV1.post('/login',(req, res,next)=>{
                     res.json({
                         success:true,
                         message: `Đăng nhập thành công`,
-                        token:token
+                        token
                     })
                 }
                 else{
