@@ -1,12 +1,14 @@
 import express from 'express'
-
+import {env} from './config/enviroments'
+import {connectDB} from './config/mongodb'
 const app=express()
 
-const PORT=8000;
+connectDB()
+
 
 app.get('/',(req, res) =>{
     res.json(`Hello`)
 })
-app.listen(PORT,()=>{
+app.listen(env.PORT,env.HOST_NAME,()=>{
     console.log(`Running`);
 })
