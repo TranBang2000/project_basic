@@ -31,7 +31,7 @@ routerV2.post("/", verifyToken, (req, res) => {
     user: req._id,
   })
     .then((data) => {
-      res.json({
+      res.status(500).json({
         success: true,
         message: `Hãy bắt đầu ngay thôi nào!!`,
         data: data,
@@ -50,7 +50,7 @@ routerV2.put("/:id", verifyToken, (req, res) => {
       message: `Title không được để trống`,
     });
   }
-  PostModel.findByIdAndUpdate({_id:req.params.id,use:req._id},{
+  PostModel.findByIdAndUpdate({_id:req.params.id,user:req._id},{
     title,
     description: description||"",
     url,
@@ -64,7 +64,7 @@ routerV2.put("/:id", verifyToken, (req, res) => {
           data: data,
         });
       }else return res.json({
-        sucess:false,
+        success:false,
         message:`Cập nhật thất bại`
       })
     })

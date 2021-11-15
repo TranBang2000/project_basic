@@ -1,13 +1,23 @@
 const express = require('express');
 import UserModel from '../models/user.models'
 import {env} from '../config/enviroments'
+import verifyToken from '../middlewares/auth.middleware'
 const jwt= require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const argon2 = require('argon2');
 const bodyParser = require('body-parser')
 
 const routerV1=express.Router();
 
-
+routerV1.get('/',verifyToken,(req, res,next)=>{
+    UserModel.findById(req._id).select('-password')
+    .then(data=>{
+       if(data){
+        res.json({ success: true, data })
+       }else return res.status(400).json({ success: false, message: 'Không tìm thấy người dùng' }) 
+    })
+    .catch(err=>res.status(500).json({ success: false, message: 'Có lỗi xảy ra '+err }))
+})
 //router POST api/auth/register
 routerV1.post('/register', (req,res,next) =>{
     //lay un pw tu client
@@ -37,7 +47,7 @@ routerV1.post('/register', (req,res,next) =>{
                 res.json({
                     success:true,
                     message: `Tạo tài khoản thành công`,
-                    token:token
+                    token
                 })
             }
             else{
