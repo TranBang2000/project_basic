@@ -5,7 +5,8 @@ const routerV2 = express.Router();
 //get
 routerV2.get("/", verifyToken, (req, res) => {
   //id cua user tao request
-  PostModel.find({ user: req._id }).populate("user",['username'])
+  PostModel.find({ user: req._id })
+    .populate("user", ["username"])
     .then((data) => {
       res.json({
         success: true,
@@ -50,23 +51,28 @@ routerV2.put("/:id", verifyToken, (req, res) => {
       message: `Title không được để trống`,
     });
   }
-  PostModel.findByIdAndUpdate({_id:req.params.id,user:req._id},{
-    title,
-    description: description||"",
-    url,
-    status: status || "Pending"
-  },{new:true})
+  PostModel.findByIdAndUpdate(
+    { _id: req.params.id, user: req._id },
+    {
+      title,
+      description: description || "",
+      url,
+      status: status || "Pending",
+    },
+    { new: true }
+  )
     .then((data) => {
-      if(data){
+      if (data) {
         res.json({
           success: true,
           message: `Cập nhật thành công!!`,
           data: data,
         });
-      }else return res.json({
-        success:false,
-        message:`Cập nhật thất bại`
-      })
+      } else
+        return res.json({
+          success: false,
+          message: `Cập nhật thất bại`,
+        });
     })
     .catch((err) => res.status(500).json(`Có lỗi xảy ra:` + err));
 });
@@ -74,19 +80,20 @@ routerV2.put("/:id", verifyToken, (req, res) => {
 //delete
 routerV2.delete("/:id", verifyToken, (req, res) => {
   //id cua user tao request
-  PostModel.findOneAndDelete({ _id:req.params.id,user: req._id })
-  .then((data) => {
-    if(data){
-      res.json({
-        success: true,
-        message: `Xóa thành công!!`,
-        data: data,
-      });
-    }else return res.json({
-      sucess:false,
-      message:`Xóa thất bại`
+  PostModel.findOneAndDelete({ _id: req.params.id, user: req._id })
+    .then((data) => {
+      if (data) {
+        res.json({
+          success: true,
+          message: `Xóa thành công!!`,
+          data: data,
+        });
+      } else
+        return res.json({
+          sucess: false,
+          message: `Xóa thất bại`,
+        });
     })
-  })
     .catch((err) => res.json(err));
 });
 module.exports = routerV2;
